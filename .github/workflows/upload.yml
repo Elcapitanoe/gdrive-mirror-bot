@@ -1,0 +1,49 @@
+name: Mirror and Upload to Google Drive
+
+on:
+  push:
+    paths:
+      - 'config.txt'
+
+jobs:
+  mirror-and-upload:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Read download URL from config.txt
+        id: read_url
+        run: |
+          URL=$(cat config.txt)
+          echo "download_url=$URL" >> "$GITHUB_OUTPUT"
+
+      - name: Download file
+        run: |
+          mkdir -p download
+          cd download
+          wget "${{ steps.read_url.outputs.download_url }}" -O file.zip
+
+      - name: Setup rclone
+        run: |
+          echo "$RCLONE_CONFIG" | base64 --decode > rclone.conf
+        env:
+          RCLONE_CONFIG: ${{ secrets.RCLONE_CONFIG }}
+
+      - name: Upload to Google Drive
+        run: |
+          rclone --config rclone.conf copy download/ remote:TelegramUploads --drive-chunk-size 64M
+
+      - name: Get sharable link from Google Drive (via rclone link)
+        id: gdrive_link
+        run: |
+          LINK=$(rclone --config rclone.conf link remote:TelegramUploads/file.zip)
+          echo "link=$LINK" >> "$GITHUB_OUTPUT"
+
+      - name: Send message to Telegram
+        run: |
+          bash script/send_to_telegram.sh "${{ steps.gdrive_link.outputs.link }}"
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
