@@ -33,6 +33,11 @@ jobs:
           GDRIVE_CLIENT_SECRET: ${{ secrets.GDRIVE_CLIENT_SECRET }}
           GDRIVE_REFRESH_TOKEN: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
           GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}
+          
+      - name: Debug link output
+        run: |
+          echo "Google Drive Link:"
+          cat gdrive_url.txt
 
       - name: Send link to Telegram
         run: |
