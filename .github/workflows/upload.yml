@@ -19,22 +19,22 @@ jobs:
           URL=$(cat config.txt)
           echo "download_url=$URL" >> "$GITHUB_OUTPUT"
 
-      - name: Download file
+      - name: Download file with original name
         run: |
           mkdir -p download
           cd download
-          wget "${{ steps.read_url.outputs.download_url }}" -O file.zip
+          wget --content-disposition "${{ steps.read_url.outputs.download_url }}"
 
-      - name: Upload using Google Drive API
+      - name: Upload to Google Drive
         run: |
-          bash script/upload_with_api.sh download/file.zip > gdrive_url.txt
+          bash script/upload_with_api.sh download > gdrive_url.txt
         env:
           GDRIVE_CLIENT_ID: ${{ secrets.GDRIVE_CLIENT_ID }}
           GDRIVE_CLIENT_SECRET: ${{ secrets.GDRIVE_CLIENT_SECRET }}
           GDRIVE_REFRESH_TOKEN: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
           GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}
 
-      - name: Send Google Drive link to Telegram
+      - name: Send link to Telegram
         run: |
           LINK=$(cat gdrive_url.txt)
           bash script/send_to_telegram.sh "$LINK"
