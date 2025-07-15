@@ -32,10 +32,12 @@ UPLOAD_RESPONSE=$(curl -s -X POST \
 
 FILE_ID=$(echo "$UPLOAD_RESPONSE" | jq -r .id)
 
+# Give public access but don't print response
 curl -s -X POST \
   -H "Authorization: Bearer ${ACCESS_TOKEN}" \
   -H "Content-Type: application/json" \
   -d '{"role": "reader", "type": "anyone"}' \
-  "https://www.googleapis.com/drive/v3/files/${FILE_ID}/permissions"
+  "https://www.googleapis.com/drive/v3/files/${FILE_ID}/permissions" > /dev/null
 
+# Now print only the link
 echo "https://drive.google.com/file/d/${FILE_ID}/view?usp=sharing"
