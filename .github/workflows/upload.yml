@@ -33,16 +33,18 @@ jobs:
           GDRIVE_CLIENT_SECRET: ${{ secrets.GDRIVE_CLIENT_SECRET }}
           GDRIVE_REFRESH_TOKEN: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
           GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}
-          
+
       - name: Debug link output
         run: |
           echo "Google Drive Link:"
           cat gdrive_url.txt
 
-      - name: Send link to Telegram
+      - name: Send Google Drive link to Telegram
         run: |
+          FILE_PATH=$(find download -type f | head -n 1)
+          FILE_NAME=$(basename "$FILE_PATH")
           LINK=$(cat gdrive_url.txt)
-          bash script/send_to_telegram.sh "$LINK"
+          bash script/send_to_telegram.sh "$LINK" "$FILE_NAME"
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
