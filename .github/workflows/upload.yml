@@ -25,25 +25,19 @@ jobs:
           cd download
           wget "${{ steps.read_url.outputs.download_url }}" -O file.zip
 
-      - name: Setup rclone
+      - name: Upload using Google Drive API
         run: |
-          echo "$RCLONE_CONFIG" | base64 --decode > rclone.conf
+          bash script/upload_with_api.sh download/file.zip > gdrive_url.txt
         env:
-          RCLONE_CONFIG: ${{ secrets.RCLONE_CONFIG }}
+          GDRIVE_CLIENT_ID: ${{ secrets.GDRIVE_CLIENT_ID }}
+          GDRIVE_CLIENT_SECRET: ${{ secrets.GDRIVE_CLIENT_SECRET }}
+          GDRIVE_REFRESH_TOKEN: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
+          GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}
 
-      - name: Upload to Google Drive
+      - name: Send Google Drive link to Telegram
         run: |
-          rclone --config rclone.conf copy download/ remote:TelegramUploads --drive-chunk-size 64M
-
-      - name: Get sharable link from Google Drive (via rclone link)
-        id: gdrive_link
-        run: |
-          LINK=$(rclone --config rclone.conf link remote:TelegramUploads/file.zip)
-          echo "link=$LINK" >> "$GITHUB_OUTPUT"
-
-      - name: Send message to Telegram
-        run: |
-          bash script/send_to_telegram.sh "${{ steps.gdrive_link.outputs.link }}"
+          LINK=$(cat gdrive_url.txt)
+          bash script/send_to_telegram.sh "$LINK"
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
