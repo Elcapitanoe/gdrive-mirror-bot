@@ -1,1 +1,1 @@
-http://speedtest1.jlm.net.id/download/test_random_10mb.zip
+https://ash-speed.hetzner.com/100MB.bin
