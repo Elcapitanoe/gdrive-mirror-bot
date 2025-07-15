@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'config.txt'
+  workflow_dispatch:
 
 jobs:
   mirror-and-upload:
