@@ -42,7 +42,7 @@ jobs:
 
       - name: Update and Update list.txt
         run: |
-          LIST_FILE="google-drive-url/list.txt"          
+          LIST_FILE="logs/gdrive_url_list.txt"          
           TEMP_FILE=$(mktemp)
           cat gdrive_url.txt > "$TEMP_FILE"
           echo "" >> "$TEMP_FILE"
