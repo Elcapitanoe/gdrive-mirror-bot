@@ -40,6 +40,24 @@ jobs:
           echo "Google Drive Link:"
           cat gdrive_url.txt
 
+      - name: Update and Update list.txt
+        run: |
+          LIST_FILE="google-drive-url/list.txt"          
+          TEMP_FILE=$(mktemp)
+          cat gdrive_url.txt > "$TEMP_FILE"
+          echo "" >> "$TEMP_FILE"
+          cat "$LIST_FILE" >> "$TEMP_FILE" || true
+          mv "$TEMP_FILE" "$LIST_FILE"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add "$LIST_FILE"
+          if git diff --staged --quiet; then
+            echo "No changes in list.txt."
+          else
+            git commit -m "chore: update google drive url list.txt"
+            git push
+          fi
+
       - name: Send Google Drive link to Telegram
         run: |
           FILE_PATH=$(find download -type f | head -n 1)
