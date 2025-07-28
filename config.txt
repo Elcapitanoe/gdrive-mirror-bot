@@ -1,1 +1,1 @@
-https://github.com/Elcapitanoe/Komodo-Build-Prop/releases/download/v250718/Komodo_beta_BP31.250610.004.zip
+https://github.com/Elcapitanoe/Komodo-Build-Prop/archive/refs/tags/v250718.zip
