@@ -55,7 +55,7 @@ jobs:
             echo "No changes in list.txt."
           else
             git commit -m "chore: update google drive url list.txt"
-            git push
+            git push https://x-access-token:${{ secrets.GH_TOKEN_PUSH }}@github.com/Elcapitanoe/gdrive-mirror-bot.git
           fi
 
       - name: Send Google Drive link to Telegram
