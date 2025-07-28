@@ -1,1 +1,1 @@
-https://github.com/Elcapitanoe/Komodo-Build-Prop/archive/refs/tags/v250718.zip
+https://github.com/Elcapitanoe/Komodo-Build-Prop/archive/refs/tags/v250718.tar.gz
