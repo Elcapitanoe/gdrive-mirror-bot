@@ -27,7 +27,7 @@ jobs:
           mkdir -p download
           cd download
           URL="${{ steps.read_url.outputs.download_url }}"
-          wget --content-disposition "$URL"
+          wget --content-disposition --progress=bar:force "$URL"
           for FILE in *\?*; do
             CLEAN_NAME=$(echo "$FILE" | cut -d'?' -f1)
             mv "$FILE" "$CLEAN_NAME"
