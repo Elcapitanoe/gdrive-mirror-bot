@@ -1,47 +1,56 @@
 # Google Drive Mirror Bot
 
-A GitHub Actions-powered automation that downloads a file from a direct link (defined in `config.txt`), uploads it to Google Drive using the **Google Drive API**, and sends the shareable link to a Telegram channel via bot.
+A lightweight GitHub Actions-powered bot that:
+
+1. Downloads a file from a direct URL (`config.txt`)
+2. Uploads it to Google Drive using the **Google Drive API**
+3. Sends the shareable Google Drive link to your Telegram channel or group
 
 ---
 
-## Setup Steps
+## Quick Setup
 
-1. **Fork this repository** or upload it to your own GitHub repo.
-2. **Add the following GitHub Secrets** under  
+1. **Fork this repo** or upload it to your own GitHub repository.
+2. **Add these GitHub secrets** under  
    `Settings → Secrets and variables → Actions → New repository secret`:
 
-   | Secret Name              | Description                                             |
-   |--------------------------|---------------------------------------------------------|
-   | `TELEGRAM_BOT_TOKEN`     | Token from [@BotFather](https://t.me/BotFather)         |
-   | `TELEGRAM_CHAT_ID`       | Telegram channel or group ID (e.g., `-1001234567890`)   |
-   | `GDRIVE_CLIENT_ID`       | OAuth 2.0 Client ID from Google Cloud Console           |
-   | `GDRIVE_CLIENT_SECRET`   | OAuth 2.0 Client Secret from Google Cloud Console       |
-   | `GDRIVE_REFRESH_TOKEN`   | Refresh Token generated via OAuth Playground            |
-   | `GDRIVE_FOLDER_ID`       | Target folder ID in Google Drive                        |
+   | Secret Name             | What it does                                              |
+   |-------------------------|-----------------------------------------------------------|
+   | `TELEGRAM_BOT_TOKEN`    | Bot token from [@BotFather](https://t.me/BotFather)       |
+   | `TELEGRAM_CHAT_ID`      | Your channel/group ID (example: `-1001234567890`)         |
+   | `GDRIVE_CLIENT_ID`      | OAuth Client ID from Google Cloud Console                 |
+   | `GDRIVE_CLIENT_SECRET`  | OAuth Client Secret from Google Cloud Console             |
+   | `GDRIVE_REFRESH_TOKEN`  | Refresh token from Google OAuth Playground                |
+   | `GDRIVE_FOLDER_ID`      | The destination folder ID in Google Drive                 |
 
-3. **Edit `config.txt`** and replace its content with a **direct download link**, like: https://example.com/file.zip
+3. **Edit `config.txt`**  
+   Replace its content with a direct file URL, such as:  
+   `https://example.com/firmware-update.zip`
 
-4. **Commit your changes**  
-Once pushed, GitHub Actions will automatically:
-- Download the file
-- ☁Upload it to your Google Drive folder
-- Send the Google Drive link to your Telegram channel
+4. **Push your changes**  
+   Once committed, GitHub Actions will:
+
+   - Download the file
+   - Upload it to your Google Drive folder
+   - Send the Google Drive link to your Telegram
 
 ---
 
-## Supported Download Links
+## Supported File URLs
 
-Use only direct file URLs, like:
+Only **direct download links** are supported, for example:
 
 - `https://example.com/file.zip`
-- `https://yourdomain.com/device/rom-latest.zip`
+- `https://cdn.xiameme.com/sweet.zip`
+- `https://selaluviral.org/nenek_sama_kakek_berduaan.3gp?v=1`
+- `https://aselole.id/download?filename=hohohihe_viral.3gp`
 
-The file must be publicly downloadable without login, redirects, or captchas.
+> Links must be publicly downloadable, no login, no redirects, no captchas.
 
 ---
 
-## Automation Behavior
+## How It Works
 
-- The workflow only runs if `config.txt` is changed
-- Google Drive links are automatically made shareable
-- Telegram messages use Markdown formatting
+- The workflow only runs when `config.txt` is modified
+- The uploaded file will be set to "shareable" by default
+- Telegram messages are sent using Markdown formatting for better readability
