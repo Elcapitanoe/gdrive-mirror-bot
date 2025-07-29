@@ -52,7 +52,7 @@ jobs:
         run: |
           LIST_FILE="logs/gdrive_url_list.txt"
           TEMP_FILE=$(mktemp)
-          paste -d'\n' <(ls download) gdrive_url.txt | awk 'NR%2==0{print $0 "\n"; next}1' > "$TEMP_FILE"
+          paste -d'\n' <(ls download) gdrive_url.txt > "$TEMP_FILE"
           echo "" >> "$TEMP_FILE"
           cat "$LIST_FILE" >> "$TEMP_FILE" || true
           mv "$TEMP_FILE" "$LIST_FILE"
