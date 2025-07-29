@@ -1,4 +1,4 @@
-name: Mirror and Upload to Google Drive
+name: Upload to Google Drive
 
 on:
   push:
@@ -16,17 +16,22 @@ jobs:
         with:
           token: ${{ secrets.GH_TOKEN_PUSH }}
 
-      - name: Read download URL from config.txt
+      - name: Read config.txt
         id: read_url
         run: |
           URL=$(cat config.txt)
           echo "download_url=$URL" >> "$GITHUB_OUTPUT"
 
-      - name: Download file with original name
+      - name: Download file and sanitize name
         run: |
           mkdir -p download
           cd download
-          wget --content-disposition "${{ steps.read_url.outputs.download_url }}"
+          URL="${{ steps.read_url.outputs.download_url }}"
+          wget --content-disposition "$URL"
+          for FILE in *\?*; do
+            CLEAN_NAME=$(echo "$FILE" | cut -d'?' -f1)
+            mv "$FILE" "$CLEAN_NAME"
+          done
 
       - name: Upload to Google Drive
         run: |
@@ -42,7 +47,7 @@ jobs:
           echo "Google Drive Link:"
           cat gdrive_url.txt
 
-      - name: Update and Update list.txt
+      - name: Update list.txt
         run: |
           LIST_FILE="logs/gdrive_url_list.txt"          
           TEMP_FILE=$(mktemp)
@@ -58,9 +63,8 @@ jobs:
           else
             git commit -m "chore: update google drive url list.txt"
             git push https://x-access-token:${{ secrets.GH_TOKEN_PUSH }}@github.com/Elcapitanoe/gdrive-mirror-bot.git
-          fi
 
-      - name: Send Google Drive link to Telegram
+      - name: Send to Telegram
         run: |
           FILE_PATH=$(find download -type f | head -n 1)
           FILE_NAME=$(basename "$FILE_PATH")
