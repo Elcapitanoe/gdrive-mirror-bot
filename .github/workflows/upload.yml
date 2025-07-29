@@ -47,11 +47,11 @@ jobs:
           echo "Google Drive Link:"
           cat gdrive_url.txt
 
-      - name: Update list.txt
+      - name: Update gdrive_url_list.txt with filename + link
         run: |
           LIST_FILE="logs/gdrive_url_list.txt"
           TEMP_FILE=$(mktemp)
-          cat gdrive_url.txt > "$TEMP_FILE"
+          paste -d'\n' <(ls download) gdrive_url.txt | awk 'NR%2==0{print $0 "\n"; next}1' > "$TEMP_FILE"
           echo "" >> "$TEMP_FILE"
           cat "$LIST_FILE" >> "$TEMP_FILE" || true
           mv "$TEMP_FILE" "$LIST_FILE"
@@ -61,7 +61,7 @@ jobs:
           if git diff --staged --quiet; then
             echo "No changes in list.txt."
           else
-            git commit -m "chore: update google drive url list.txt"
+            git commit -m "chore: update gdrive_url_list.txt with filename and spacing"
             git push https://x-access-token:${{ secrets.GH_TOKEN_PUSH }}@github.com/Elcapitanoe/gdrive-mirror-bot.git
           fi
 
