@@ -8,7 +8,6 @@ FOLDER_ID="${GDRIVE_FOLDER_ID}"
 
 INPUT_PATH="$1"
 
-# If directory given, pick first file
 if [ -d "$INPUT_PATH" ]; then
   FILE_PATH=$(find "$INPUT_PATH" -type f | head -n 1)
 else
@@ -32,12 +31,10 @@ UPLOAD_RESPONSE=$(curl -s -X POST \
 
 FILE_ID=$(echo "$UPLOAD_RESPONSE" | jq -r .id)
 
-# Give public access but don't print response
 curl -s -X POST \
   -H "Authorization: Bearer ${ACCESS_TOKEN}" \
   -H "Content-Type: application/json" \
   -d '{"role": "reader", "type": "anyone"}' \
   "https://www.googleapis.com/drive/v3/files/${FILE_ID}/permissions" > /dev/null
 
-# Now print only the link
 echo "https://drive.google.com/file/d/${FILE_ID}/view?usp=sharing"
