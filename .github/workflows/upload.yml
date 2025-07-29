@@ -49,7 +49,7 @@ jobs:
 
       - name: Update list.txt
         run: |
-          LIST_FILE="logs/gdrive_url_list.txt"          
+          LIST_FILE="logs/gdrive_url_list.txt"
           TEMP_FILE=$(mktemp)
           cat gdrive_url.txt > "$TEMP_FILE"
           echo "" >> "$TEMP_FILE"
@@ -63,6 +63,7 @@ jobs:
           else
             git commit -m "chore: update google drive url list.txt"
             git push https://x-access-token:${{ secrets.GH_TOKEN_PUSH }}@github.com/Elcapitanoe/gdrive-mirror-bot.git
+          fi
 
       - name: Send to Telegram
         run: |
