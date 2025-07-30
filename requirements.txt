@@ -1,1 +1,5 @@
-python-telegram-bot>=20.0,<21.0
+python-telegram-bot==20.8
+psutil
+python-dotenv
+nest_asyncio
+requests
