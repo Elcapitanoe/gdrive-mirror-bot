@@ -1,1 +1,1 @@
-https://www.gyan.dev/ffmpeg/builds/packages/ffmpeg-7.1.1-essentials_build.zip
+https://f-droid.org/repo/com.termux_1022.apk
