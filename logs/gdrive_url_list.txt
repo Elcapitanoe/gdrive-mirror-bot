@@ -1,3 +1,6 @@
+ffmpeg-7.1.1-full_build.7z
+https://drive.google.com/file/d/1b6CSVs186RMCe39_Nxofjrn_jV5j-deW/view?usp=sharing
+
 MindTheGapps-15.0.0-arm64-20250214_082511.zip
 https://drive.google.com/file/d/1xuQSpVr2DlwEhycOI92tYvIgMunO5YnW/view?usp=sharing
 
