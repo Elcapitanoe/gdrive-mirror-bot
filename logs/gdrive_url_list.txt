@@ -1,3 +1,6 @@
+com.termux_1022.apk
+https://drive.google.com/file/d/1ffaGcJKrLGe3VaZGwywdSafLiU19Htdz/view?usp=sharing
+
 ffmpeg-7.1.1-essentials_build.zip
 https://drive.google.com/file/d/1NuZzfCdcLiBgnRKLnWjzh4odqxrJeeyy/view?usp=sharing
 
