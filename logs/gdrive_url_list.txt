@@ -1,3 +1,6 @@
+ffmpeg-7.1.1-essentials_build.zip
+https://drive.google.com/file/d/1NuZzfCdcLiBgnRKLnWjzh4odqxrJeeyy/view?usp=sharing
+
 ffmpeg-7.1.1-full_build.7z
 https://drive.google.com/file/d/1b6CSVs186RMCe39_Nxofjrn_jV5j-deW/view?usp=sharing
 
