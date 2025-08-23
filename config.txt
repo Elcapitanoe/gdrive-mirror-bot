@@ -1,1 +1,1 @@
-https://master.dl.sourceforge.net/project/riaru-files/ROMs/Hyper%20Series/Hyper%20TR/trms-hyper-tr-rolling-20240527-sweet.zip?viasf=1
+https://e47b8ab6487c7271956f83661e6ac050.r2.cloudflarestorage.com/evolution-builds/sweet/16/EvolutionX-16.0-20250812-sweet-11.0-Official.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=51584b804f31e3a1037f0d19e1e4742b%2F20250823%2Fus-east-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20250823T054629Z&amp;X-Amz-Expires=60&amp;X-Amz-SignedHeaders=host&amp;X-Amz-Signature=ffdd994ed61a2f88c7ed0c547685bc62cde0b4cabd2cd9235fde4f8f99cf6991
