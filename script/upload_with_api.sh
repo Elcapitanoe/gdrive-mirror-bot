@@ -1,69 +1,51 @@
-#!/usr/bin/env bash
+#!/bin/bash
 set -euo pipefail
 
-: "${GDRIVE_CLIENT_ID:?GDRIVE_CLIENT_ID is required}"
-: "${GDRIVE_CLIENT_SECRET:?GDRIVE_CLIENT_SECRET is required}"
-: "${GDRIVE_REFRESH_TOKEN:?GDRIVE_REFRESH_TOKEN is required}"
-: "${GDRIVE_FOLDER_ID:=}"  
-
-if [[ $# -lt 1 ]]; then
-  echo "Usage: $0 <file_path> [FOLDER_ID_override]" >&2
-  exit 1
-fi
+CLIENT_ID="${GDRIVE_CLIENT_ID}"
+CLIENT_SECRET="${GDRIVE_CLIENT_SECRET}"
+REFRESH_TOKEN="${GDRIVE_REFRESH_TOKEN}"
+FOLDER_ID="${GDRIVE_FOLDER_ID}"
 
 INPUT_PATH="$1"
-OVERRIDE_FOLDER_ID="${2:-}"
 
-if [[ ! -f "$INPUT_PATH" ]]; then
-  echo "File tidak ditemukan: $INPUT_PATH" >&2
+if [ -d "$INPUT_PATH" ]; then
+  FILE_PATH=$(find "$INPUT_PATH" -type f | head -n 1)
+else
+  FILE_PATH="$INPUT_PATH"
+fi
+
+FILE_NAME=$(basename "$FILE_PATH")
+MIME_TYPE=$(file --mime-type -b "$FILE_PATH")
+
+ACCESS_TOKEN=$(curl -sS -X POST https://oauth2.googleapis.com/token \
+  -d client_id="${CLIENT_ID}" \
+  -d client_secret="${CLIENT_SECRET}" \
+  -d refresh_token="${REFRESH_TOKEN}" \
+  -d grant_type=refresh_token | jq -r .access_token)
+
+UPLOAD_RESPONSE=$(curl -sS -X POST \
+  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
+  -F "metadata={\"name\":\"${FILE_NAME}\",\"parents\":[\"${FOLDER_ID}\"]};type=application/json; charset=UTF-8" \
+  -F "file=@${FILE_PATH};type=${MIME_TYPE}" \
+  "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&supportsAllDrives=true&fields=id,webViewLink")
+
+FILE_ID=$(echo "$UPLOAD_RESPONSE" | jq -r .id)
+if [ -z "${FILE_ID}" ] || [ "${FILE_ID}" = "null" ]; then
+  echo "Upload gagal. Respon API:" >&2
+  echo "$UPLOAD_RESPONSE" | jq . >&2 || echo "$UPLOAD_RESPONSE" >&2
   exit 1
 fi
 
-FOLDER_ID="${OVERRIDE_FOLDER_ID:-${GDRIVE_FOLDER_ID}}"
-if [[ -z "$FOLDER_ID" ]]; then
-  echo "FOLDER_ID belum ditentukan. Set argumen ke-2 atau ENV GDRIVE_FOLDER_ID." >&2
-  exit 1
+WEBVIEW_LINK=$(echo "$UPLOAD_RESPONSE" | jq -r .webViewLink)
+
+PERM_RESPONSE=$(curl -sS -X POST \
+  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{"role":"reader","type":"anyone"}' \
+  "https://www.googleapis.com/drive/v3/files/${FILE_ID}/permissions?supportsAllDrives=true") || true
+
+if echo "$PERM_RESPONSE" | jq -e '.error' >/dev/null 2>&1; then
+  echo "Upload sukses, tapi set permission publik gagal: $(echo "$PERM_RESPONSE" | jq -r '.error.message')" >&2
 fi
 
-FILENAME="$(basename "$INPUT_PATH")"
-MIME_TYPE="$(file --mime-type -b "$INPUT_PATH" || echo application/octet-stream)"
-
-ACCESS_TOKEN="$(
-  curl -sS -X POST https://oauth2.googleapis.com/token \
-    -H 'Content-Type: application/x-www-form-urlencoded' \
-    -d "client_id=${GDRIVE_CLIENT_ID}" \
-    -d "client_secret=${GDRIVE_CLIENT_SECRET}" \
-    -d "refresh_token=${GDRIVE_REFRESH_TOKEN}" \
-    -d "grant_type=refresh_token" \
-  | { jq -r '.access_token' 2>/dev/null || sed -n 's/.*"access_token"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p'; }
-)"
-
-if [[ -z "$ACCESS_TOKEN" || "$ACCESS_TOKEN" == "null" ]]; then
-  echo "Gagal mendapatkan access_token." >&2
-  exit 1
-fi
-
-UPLOAD_RESP="$(
-  curl -sS -X POST \
-    -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-    -F "metadata={\"name\":\"${FILENAME}\",\"parents\":[\"${FOLDER_ID}\"]};type=application/json; charset=UTF-8" \
-    -F "file=@${INPUT_PATH};type=${MIME_TYPE}" \
-    "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart"
-)"
-
-FILE_ID="$(echo "$UPLOAD_RESP" | { jq -r '.id' 2>/dev/null || sed -n 's/.*"id"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p'; })"
-
-if [[ -z "$FILE_ID" || "$FILE_ID" == "null" ]]; then
-  echo "Gagal upload. Respon: $UPLOAD_RESP" >&2
-  exit 1
-fi
-
-PERM_RESP="$(
-  curl -sS -X POST \
-    -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-    -H "Content-Type: application/json" \
-    -d '{"role":"reader","type":"anyone"}' \
-    "https://www.googleapis.com/drive/v3/files/${FILE_ID}/permissions"
-)" || true
-
-echo "https://drive.google.com/file/d/${FILE_ID}/view?usp=sharing"
+echo "${WEBVIEW_LINK:-https://drive.google.com/file/d/${FILE_ID}/view?usp=sharing}"
