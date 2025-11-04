@@ -1,1 +1,1 @@
-https://e47b8ab6487c7271956f83661e6ac050.r2.cloudflarestorage.com/evolution-builds/sweet/16/EvolutionX-16.0-20250921-sweet-11.2-Official.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=51584b804f31e3a1037f0d19e1e4742b%2F20251104%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20251104T103756Z&X-Amz-Expires=60&X-Amz-SignedHeaders=host&X-Amz-Signature=19e928a23e5dfabbdc216e1c5705beab8be72f0984cbdae1b7b0f78cdd6d8e57
+https://onboardcloud.dl.sourceforge.net/project/infinity-x/sweet/16/gapps/Project_Infinity-X-3.3-sweet-20251019-0417-GAPPS-OFFICIAL.zip?viasf=1
