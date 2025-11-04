@@ -1,1 +1,1 @@
-https://github.com/5ec1cff/TrickyStore/releases/download/1.4.1/Tricky-Store-v1.4.1-245-72b2e84-release.zip
+https://github.com/5ec1cff/TrickyStore/archive/refs/tags/1.4.1.tar.gz
