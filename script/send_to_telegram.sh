@@ -51,15 +51,17 @@ FILE_SIZE_ESCAPED="$(html_escape "$FILE_SIZE")"
 GDRIVE_LINK_ESCAPED="$(html_escape "$GDRIVE_LINK")"
 
 TIMEZONE="${TIMEZONE:-Asia/Jakarta}"
-CURRENT_DATE_FULL=$(TZ="$TIMEZONE" date +"%d %B %Y %H:%M:%S %Z")
+CURRENT_DATE_FULL=$(TZ="$TIMEZONE" date +"%d %B %Y")
 
 MESSAGE="File successfully uploaded!
-Uploaded on ${CURRENT_DATE_FULL}
-Mirrored by @domi_adiwijaya
+Uploaded on: ${CURRENT_DATE_FULL}
+Mirrored by: @domi_adiwijaya
 
 • File: ${FILE_NAME_ESCAPED}
 • Size: ${FILE_SIZE_ESCAPED}
-• SHA256: <code>${SHA256_ESCAPED}</code>
+
+SHA256
+<code>${SHA256_ESCAPED}</code>
 
 Notes:
 • This is a temporary mirror, please download ASAP!"
