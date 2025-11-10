@@ -23,12 +23,10 @@ human_readable_size() {
     return
   fi
   awk -v b="$bytes" 'BEGIN{
-    split("B KB MB GB TB PB", u);
+    split("B KB MB GB TB PB EB", u);
     i=1;
-    while (b >= 1024 && i < 6) { b = b/1024; i++ }
-    fmt = sprintf("%.2f %s", b, u[i]);
-    sub(/\.00([[:space:]]|$)/, "\\1", fmt);
-    print fmt;
+    while (b >= 1024 && i < 7) { b = b/1024; i++ }
+    printf "%.2f %s\n", b, u[i];
   }'
 }
 
@@ -46,12 +44,7 @@ if [ -f "$FILE_PATH" ]; then
   SHA256_INFO="$SHA256_VAL"
   FILE_BYTES=$(get_file_size "$FILE_PATH" 2>/dev/null || echo "")
   if [[ -n "$FILE_BYTES" ]]; then
-    if command -v numfmt >/dev/null 2>&1; then
-      FILE_SIZE=$(numfmt --to=iec --format="%.2f" "$FILE_BYTES" 2>/dev/null || human_readable_size "$FILE_BYTES")
-      FILE_SIZE="${FILE_SIZE/%.00/}"
-    else
-      FILE_SIZE=$(human_readable_size "$FILE_BYTES")
-    fi
+    FILE_SIZE=$(human_readable_size "$FILE_BYTES")
   else
     FILE_SIZE="(file size unknown)"
   fi
