@@ -5,15 +5,31 @@ GDRIVE_LINK="$1"
 FILE_NAME="$2"
 FILE_PATH="./download/$FILE_NAME"
 
+get_file_size() {
+  local f="$1"
+  if stat -c%s "$f" >/dev/null 2>&1; then
+    stat -c%s "$f"
+  elif stat -f%z "$f" >/dev/null 2>&1; then
+    stat -f%z "$f"
+  else
+    wc -c <"$f" | tr -d '[:space:]'
+  fi
+}
+
 human_readable_size() {
-  local bytes=$1
-  local units=("B" "KB" "MB" "GB" "TB" "PB")
-  local i=0
-  while (( bytes >= 1024 && i < ${#units[@]} - 1 )); do
-    bytes=$(awk "BEGIN {print $bytes/1024}")
-    ((i++))
-  done
-  printf "%.2f %s" "$bytes" "${units[$i]}"
+  local bytes="$1"
+  if ! [[ "$bytes" =~ ^[0-9]+$ ]]; then
+    printf "%s" "(unknown)"
+    return
+  fi
+  awk -v b="$bytes" 'BEGIN{
+    split("B KB MB GB TB PB", u);
+    i=1;
+    while (b >= 1024 && i < 6) { b = b/1024; i++ }
+    fmt = sprintf("%.2f %s", b, u[i]);
+    sub(/\.00([[:space:]]|$)/, "\\1", fmt);
+    print fmt;
+  }'
 }
 
 SHA256_INFO=""
@@ -28,8 +44,17 @@ if [ -f "$FILE_PATH" ]; then
     SHA256_VAL="(sha256sum not available)"
   fi
   SHA256_INFO="$SHA256_VAL"
-  FILE_BYTES=$(stat -c%s "$FILE_PATH" 2>/dev/null || stat -f%z "$FILE_PATH")
-  FILE_SIZE=$(human_readable_size "$FILE_BYTES")
+  FILE_BYTES=$(get_file_size "$FILE_PATH" 2>/dev/null || echo "")
+  if [[ -n "$FILE_BYTES" ]]; then
+    if command -v numfmt >/dev/null 2>&1; then
+      FILE_SIZE=$(numfmt --to=iec --format="%.2f" "$FILE_BYTES" 2>/dev/null || human_readable_size "$FILE_BYTES")
+      FILE_SIZE="${FILE_SIZE/%.00/}"
+    else
+      FILE_SIZE=$(human_readable_size "$FILE_BYTES")
+    fi
+  else
+    FILE_SIZE="(file size unknown)"
+  fi
 else
   SHA256_INFO="(file not found)"
   FILE_SIZE="(file not found)"
