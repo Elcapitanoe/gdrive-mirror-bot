@@ -14,12 +14,15 @@ if [ -f "./download/$FILE_NAME" ]; then
     SHA256_VAL="(sha256sum not available)"
   fi
   FILE_SIZE=$(du -h "./download/$FILE_NAME" | awk '{print $1}')
-  SHA256_INFO="\nSize: ${FILE_SIZE}\nSHA256: ${SHA256_VAL}"
 else
   SHA256_INFO="\nSHA256: (file not found)"
 fi
 
-MESSAGE="Upload completed!\n\nFile: ${FILE_NAME}\nSize: ${FILE_SIZE}\nSHA256: ${SHA256_INFO}"
+MESSAGE="Upload completed!
+
+File: ${FILE_NAME}
+Size: ${FILE_SIZE}
+SHA256: ${SHA256_INFO}"
 
 for CHAT_ID in "$TELEGRAM_CHANNEL_ID" "$TELEGRAM_GROUP_ID" "$TELEGRAM_CHAT_PRIVATE_ID"; do
   if [ -z "${CHAT_ID:-}" ]; then
