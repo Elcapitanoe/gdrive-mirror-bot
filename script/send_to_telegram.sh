@@ -35,11 +35,28 @@ else
   FILE_SIZE="(file not found)"
 fi
 
-MESSAGE="Upload completed!
+TIMEZONE="${TIMEZONE:-Asia/Jakarta}"
+CURRENT_DATE_FULL=$(TZ="$TIMEZONE" date +"%d %B %Y %H:%M:%S %Z")
+CURRENT_DATE_DDMMYYYY=$(TZ="$TIMEZONE" date +"%d/%m/%Y")
+CURRENT_DATE_ISO=$(TZ="$TIMEZONE" date +"%Y-%m-%d")
+CURRENT_DATE_VERBOSE=$(TZ="$TIMEZONE" date +"%A, %d %B %Y")
+CURRENT_TIME_ONLY=$(TZ="$TIMEZONE" date +"%H:%M:%S %Z")
 
-File: ${FILE_NAME}
-Size: ${FILE_SIZE}
-SHA256: ${SHA256_INFO}"
+MESSAGE="File successfully uploaded!
+Uploaded on: ${CURRENT_DATE_FULL}
+Contoh format tanggal:
+• DD/MM/YYYY -> ${CURRENT_DATE_DDMMYYYY}
+• ISO (YYYY-MM-DD) -> ${CURRENT_DATE_ISO}
+• Human (Hari, DD Bulan YYYY) -> ${CURRENT_DATE_VERBOSE}
+Waktu saat upload: ${CURRENT_TIME_ONLY}
+Mirrored by @domi_adiwijaya
+
+• File: ${FILE_NAME}
+• Size: ${FILE_SIZE}
+• SHA256: \`${SHA256_INFO}\`
+
+Notes:
+• This is a temporary mirror, please download ASAP!"
 
 for CHAT_ID in "$TELEGRAM_CHANNEL_ID" "$TELEGRAM_GROUP_ID" "$TELEGRAM_CHAT_PRIVATE_ID"; do
   if [ -z "${CHAT_ID:-}" ]; then
