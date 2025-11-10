@@ -1,1 +1,1 @@
-https://phoenixnap.dl.sourceforge.net/project/riaru-files/ROMs/Various%20Ports/sweet-ota_full-OS2.0.4.0.UMZCNXM-user-14.0-20250302.zip?viasf=1
+https://github.com/Elcapitanoe/Komodo-Build-Prop/releases/download/v250819/Komodo_beta_BP31.250610.009.zip
