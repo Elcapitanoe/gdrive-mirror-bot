@@ -45,7 +45,7 @@ for CHAT_ID in "$TELEGRAM_CHANNEL_ID" "$TELEGRAM_GROUP_ID" "$TELEGRAM_CHAT_PRIVA
   if [ -z "${CHAT_ID:-}" ]; then
     continue
   fi
-  REPLY_MARKUP=$(printf '{"inline_keyboard":[[{"text":"Download File","url":"%s"}]]}' "$GDRIVE_LINK")
+  REPLY_MARKUP=$(printf '{"inline_keyboard":[[{"text":"Download File","url":"%s"},{"text":"Copy Link","switch_inline_query_current_chat":"%s"}]]}' "$GDRIVE_LINK" "$GDRIVE_LINK")
   curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
     -d chat_id="$CHAT_ID" \
     --data-urlencode text="$MESSAGE" \
