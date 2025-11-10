@@ -54,8 +54,8 @@ TIMEZONE="${TIMEZONE:-Asia/Jakarta}"
 CURRENT_DATE_FULL=$(TZ="$TIMEZONE" date +"%d/%m/%Y")
 
 MESSAGE="<strong>File successfully uploaded!</strong>
-Uploaded on ${CURRENT_DATE_FULL}
-Mirrored by @domi_adiwijaya
+<i>Uploaded on ${CURRENT_DATE_FULL}</i>
+<i>Mirrored by @domi_adiwijaya</i>
 
 • File: ${FILE_NAME_ESCAPED}
 • Size: ${FILE_SIZE_ESCAPED}
