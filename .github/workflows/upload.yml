@@ -74,6 +74,8 @@ jobs:
           bash script/send_to_telegram.sh "$LINK" "$FILE_NAME"
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_BOT2_TOKEN: ${{ secrets.TELEGRAM_BOT2_TOKEN }}
           TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
           TELEGRAM_GROUP_ID: ${{ secrets.TELEGRAM_GROUP_ID }}
+          TELEGRAM_GROUP2_ID: ${{ secrets.TELEGRAM_GROUP2_ID }}
           TELEGRAM_CHAT_PRIVATE_ID: ${{ secrets.TELEGRAM_CHAT_PRIVATE_ID }}
