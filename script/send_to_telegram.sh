@@ -84,7 +84,7 @@ SHA256
 Notes:
 • This is a temporary mirror, please download ASAP!"
 
-for CHAT_ID in "$TELEGRAM_CHANNEL_ID" "$TELEGRAM_GROUP_ID" "$TELEGRAM_CHAT_PRIVATE_ID"; do
+for CHAT_ID in "$TELEGRAM_CHANNEL_ID" "$TELEGRAM_GROUP_ID" "$TELEGRAM_GROUP2_ID" "$TELEGRAM_CHAT_PRIVATE_ID"; do
   if [ -z "${CHAT_ID:-}" ]; then
     continue
   fi
