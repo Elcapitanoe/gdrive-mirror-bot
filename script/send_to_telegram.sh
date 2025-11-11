@@ -70,6 +70,7 @@ GDRIVE_LINK_ESCAPED="$(html_escape "$GDRIVE_LINK")"
 
 TIMEZONE="${TIMEZONE:-Asia/Jakarta}"
 CURRENT_DATE_FULL=$(TZ="$TIMEZONE" date +"%d/%m/%Y")
+DELETED_DATE=$(TZ="$TIMEZONE" date -d "+7 days" +"%d/%m/%Y")
 
 MESSAGE="<strong>File successfully uploaded!</strong>
 <i>Uploaded on ${CURRENT_DATE_FULL}</i>
@@ -82,7 +83,7 @@ SHA256
 <code>${SHA256_ESCAPED}</code>
 
 Notes:
-• This is a temporary mirror, please download ASAP!"
+• Please download before ${DELETED_DATE}. This mirror will be deleted afterwards."
 
 for CHAT_ID in "$TELEGRAM_CHANNEL_ID" "$TELEGRAM_GROUP_ID" "$TELEGRAM_GROUP2_ID" "$TELEGRAM_CHAT_PRIVATE_ID"; do
   if [ -z "${CHAT_ID:-}" ]; then
